@@ -1,4 +1,7 @@
 .idea/
+.mvn/
+mvnw*
+target/
 # Compiled class file
 *.class
 
@@ -22,5 +25,13 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/.idea/
-/.idea/
+
+/gmall-admin/target/
+/gmall-generator/target/
+/gmall-wms/.mvn/
+/gmall-pms/target/
+/gmall-sms/.mvn/
+/gmall-oms/.mvn/
+/gmall-generator/target/
+/gmall-gateway/.mvn/
+/gmall-admin/target/
