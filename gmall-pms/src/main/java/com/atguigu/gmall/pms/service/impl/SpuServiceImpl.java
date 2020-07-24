@@ -25,6 +25,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.PageParamVo;
 
 import com.atguigu.gmall.pms.mapper.SpuMapper;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 
@@ -77,6 +78,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     }
 
     @Override
+    @Transactional
     public void bigSave(SpuVo spuVo) {
         //保存spu相关信息
         spuVo.setCreateTime(new Date());
