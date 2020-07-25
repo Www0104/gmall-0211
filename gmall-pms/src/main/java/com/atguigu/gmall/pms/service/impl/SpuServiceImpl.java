@@ -9,6 +9,7 @@ import com.atguigu.gmall.pms.vo.BaseAttrValueVo;
 import com.atguigu.gmall.pms.vo.SkuVo;
 import com.atguigu.gmall.pms.vo.SpuVo;
 import com.atguigu.gmall.sms.vo.SkuSaleVo;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     }
 
     @Override
-    @Transactional
+    @GlobalTransactional
     public void bigSave(SpuVo spuVo) {
         //保存spu相关信息
         spuVo.setCreateTime(new Date());
