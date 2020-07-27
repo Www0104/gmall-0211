@@ -4,6 +4,8 @@ import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 /**
  * spu属性值
  * 
@@ -13,5 +15,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface SpuAttrValueMapper extends BaseMapper<SpuAttrValueEntity> {
-	
+
+    List<SpuAttrValueEntity> querySearchAttrValueBySpuId(Long spuId);
 }

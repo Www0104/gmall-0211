@@ -28,13 +28,13 @@ public class Goods {
     @Field(type = FieldType.Date)
     private Date creatTime;
     @Field(type = FieldType.Boolean)
-    private Boolean store;
+    private Boolean store = false;
 
 
     @Field(type = FieldType.Long)
     private Long brandId;
     @Field(type = FieldType.Keyword)
-    private Long brandName;
+    private String brandName;
     @Field(type = FieldType.Keyword)
     private String logo;
 

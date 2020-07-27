@@ -21,6 +21,5 @@ spring:
     rest:
       uris: http://192.168.248.134:9200
 feign:
-  compression:
-    request:
-      enabled: true
+  sentinel:
+    enabled: true
