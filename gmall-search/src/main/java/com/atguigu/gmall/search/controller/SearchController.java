@@ -17,7 +17,7 @@ public class SearchController {
     private SearchService searchService;
 
 
-    @GetMapping("search")
+    @GetMapping("/search")
     public ResponseVo<SearchResponseVo> search(SearchParamVo paramVo){
         SearchResponseVo responseVo = this.searchService.search(paramVo);
 

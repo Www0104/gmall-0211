@@ -60,7 +60,7 @@ class GmallSearchApplicationTests {
                         goods.setSubTitle(skuEntity.getSubtitle());
                         goods.setPrice(skuEntity.getPrice().doubleValue());
                         goods.setImage(skuEntity.getDefaultImage());
-                        goods.setCreatTime(spuEntity.getCreateTime());
+                        goods.setCreateTime(spuEntity.getCreateTime());
                         ResponseVo<BrandEntity> brandEntityResponseVo = this.pmsClient.queryBrandById(skuEntity.getBrandId());
                         BrandEntity brandEntity = brandEntityResponseVo.getData();
                         if (brandEntity != null) {

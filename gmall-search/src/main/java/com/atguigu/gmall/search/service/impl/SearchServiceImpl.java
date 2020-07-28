@@ -65,28 +65,28 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private SearchSourceBuilder buildDSL(SearchParamVo paramVo){
+
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-
-
         //构建关键子查询
         String keyword = paramVo.getKeyword();
-        if (StringUtils.isEmpty(keyword)){
+        if (StringUtils.isBlank(keyword)){
             return null;
         }
-
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         sourceBuilder.query(boolQueryBuilder);
         boolQueryBuilder.must(QueryBuilders.matchQuery("title",keyword).operator(Operator.AND));
+
+
         //构建条件过滤
         //品牌过滤
         List<Long> brandId = paramVo.getBrandId();
         if (!CollectionUtils.isEmpty(brandId)){
-            boolQueryBuilder.filter(QueryBuilders.termQuery("brandId",brandId));
+            boolQueryBuilder.filter(QueryBuilders.termsQuery("brandId",brandId));
         }
         //分类过滤
         List<Long> cid = paramVo.getCid();
         if (!CollectionUtils.isEmpty(cid)){
-            boolQueryBuilder.filter(QueryBuilders.termQuery("categoryId",cid));
+            boolQueryBuilder.filter(QueryBuilders.termsQuery("categoryId",cid));
         }
         //价格区间过滤
         Double priceFrom = paramVo.getPriceFrom();
@@ -123,6 +123,7 @@ public class SearchServiceImpl implements SearchService {
                 }
             });
         }
+
         //排序
         Integer sort = paramVo.getSort();
         if (sort != null) {
@@ -140,6 +141,7 @@ public class SearchServiceImpl implements SearchService {
         sourceBuilder.size(pageSize);
         //高亮
         sourceBuilder.highlighter(new HighlightBuilder().field("title").preTags("<font style='color:red'>").postTags("</font>"));
+
         //聚合
         //品牌聚合
         sourceBuilder.aggregation(AggregationBuilders.terms("brandIdAgg").field("brandId")
@@ -159,6 +161,7 @@ public class SearchServiceImpl implements SearchService {
         System.out.println(sourceBuilder.toString());
         return sourceBuilder;
     }
+
 
     private SearchResponseVo parseResult(SearchResponse response){
         SearchResponseVo responseVo = new SearchResponseVo();
