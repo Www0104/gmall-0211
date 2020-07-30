@@ -28,4 +28,13 @@ public interface GmallPmsApi {
 
     @GetMapping("pms/spuattrvalue/search/{spuId}")
     public ResponseVo<List<SpuAttrValueEntity>> querySearchAttrValueBySpuId(@PathVariable("spuId")Long spuId);
+
+    @GetMapping("pms/spu/{id}")
+    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
+
+    @GetMapping("pms/category/parent/{parentId}")
+    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId")Long pid);
+
+    @GetMapping("pms/category/cates/{pid}")
+    public ResponseVo<List<CategoryEntity>> queryCategoriseWithSubByPid(@PathVariable("pid")Long pid);
 }

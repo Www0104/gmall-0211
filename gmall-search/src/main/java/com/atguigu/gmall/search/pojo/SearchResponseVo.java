@@ -12,7 +12,7 @@ public class SearchResponseVo {
 
     private List<CategoryEntity> categories;
 
-    private List<SearchResponseAttrVo> attrs;
+    private List<SearchResponseAttrVo> filters;
 
     private Integer pageNum;
     private Integer pageSize;

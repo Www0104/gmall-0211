@@ -4,6 +4,8 @@ import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 /**
  * 商品三级分类
  * 
@@ -13,5 +15,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface CategoryMapper extends BaseMapper<CategoryEntity> {
-	
+
+    List<CategoryEntity> queryCategoriseWithSubByPid(Long pid);
 }
