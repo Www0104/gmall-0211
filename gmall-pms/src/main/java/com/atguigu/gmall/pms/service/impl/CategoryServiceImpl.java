@@ -3,6 +3,7 @@ package com.atguigu.gmall.pms.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -35,6 +36,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     @Override
     public List<CategoryEntity> queryCategoriseWithSubByPid(Long pid) {
         return this.categoryMapper.queryCategoriseWithSubByPid(pid);
+    }
+
+    @Override
+    public List<CategoryEntity> query123CategoriesByCid3(Long cid) {
+        CategoryEntity lvl3categoryEntity = this.categoryMapper.selectById(cid);
+        CategoryEntity lvl2categoryEntity = this.categoryMapper.selectById(lvl3categoryEntity.getParentId());
+        CategoryEntity lvl1categoryEntity = this.categoryMapper.selectById(lvl2categoryEntity.getParentId());
+        return Arrays.asList(lvl1categoryEntity,lvl2categoryEntity,lvl3categoryEntity);
     }
 
 }
