@@ -55,7 +55,7 @@ public class SkuAttrValueController {
         return ResponseVo.ok(skuAttrValueEntities);
     }
 
-    @GetMapping("spu/{supId}")
+    @GetMapping("spu/{spuId}")
     public ResponseVo<List<SaleAttrValueVo>> queryAllSaleAttrValueBySpuId(@PathVariable("spuId") Long spuId){
         List<SaleAttrValueVo> saleAttrValueVos = this.skuAttrValueService.queryAllSaleAttrValueBySpuId(spuId);
         return ResponseVo.ok(saleAttrValueVos);

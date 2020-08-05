@@ -136,11 +136,14 @@ public final class CookieUtils {
 				cookieValue = URLEncoder.encode(cookieValue, encodeString);
 			}
 			Cookie cookie = new Cookie(cookieName, cookieValue);
-			if (cookieMaxAge != null && cookieMaxAge > 0)
+			if (cookieMaxAge != null && cookieMaxAge > 0){
 				cookie.setMaxAge(cookieMaxAge);
-			if (null != request)// 设置域名的cookie
+
+			}
+			if (null != request){
 				cookie.setDomain(getDomainName(request));
-			cookie.setPath("/");
+				cookie.setPath("/");
+			}// 设置域名的cookie{}
 
 			if(httpOnly != null) {
 				cookie.setHttpOnly(httpOnly);

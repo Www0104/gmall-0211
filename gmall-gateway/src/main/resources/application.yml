@@ -11,6 +11,9 @@ spring:
           uri: lb://pms-service
           predicates:
             - Path=/pms/**
+#          #请求头过滤器
+#          filters:
+#            - Auth=/pms/brand
         - id: sms-route
           uri: lb://sms-service
           predicates:
@@ -35,6 +38,7 @@ spring:
           uri: lb://index-service
           predicates:
             - Host=www.gmall.com,gmall.com
+
         - id: index-route2
           uri: lb://index-service
           predicates:
@@ -43,3 +47,17 @@ spring:
           uri: lb://item-service
           predicates:
             - Host=item.gmall.com
+        - id: auth-route
+          uri: lb://auth-service
+          predicates:
+            - Host=sso.gmall.com
+        - id: cart-route
+          uri: lb://cart-service
+          predicates:
+            - Host=cart.gmall.com
+      x-forwarded:
+        host-enabled: true
+auth:
+  jwt:
+    pubKeyPath: D:\\project\\rsa\\rsa.pub;
+    cookieName: GMALL_TOKEN

@@ -1,6 +1,8 @@
 package com.atguigu.gmall.ums.service.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.omg.CORBA.UserException;
 import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -63,6 +65,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         this.save(user);
         //删除短信验证码
 
+
+    }
+
+    @Override
+    public UserEntity queryUser(String loginName, String password) {
+        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("username",loginName)
+        .or().eq("phone",loginName)
+        .or().eq("email",loginName));
+        if (userEntity == null){
+            throw new RuntimeException("账户输入不合法！");
+        }
+
+        password = DigestUtils.md5Hex(password + userEntity.getSalt());
+        if (!StringUtils.equals(userEntity.getPassword(), password)){
+            throw new RuntimeException("密码输入错误！");
+        }
+
+        return userEntity;
 
     }
 
