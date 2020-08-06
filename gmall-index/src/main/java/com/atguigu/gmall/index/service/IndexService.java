@@ -37,7 +37,7 @@ public class IndexService {
     private DistributeLock distributeLock;
     @Autowired
     private RedissonClient redissonClient;
-    @Transactional
+
     public List<CategoryEntity> queryLv1lCategories() {
         ResponseVo<List<CategoryEntity>> listResponseVo = this.pmsClient.queryCategoriesByPid(0L);
         List<CategoryEntity> categoryEntities = listResponseVo.getData();
@@ -61,13 +61,13 @@ public class IndexService {
 //        }
 //
 //
-//        ResponseVo<List<CategoryEntity>> listResponseVo = this.pmsClient.queryCategoriseWithSubByPid(pid);
+//        ResponseVo<List<CategoryEntity>> listResponseVo = this.pmsClient.queryCategoriesWithSubByPid(pid);
 //        List<CategoryEntity> categoryEntities = listResponseVo.getData();
 //        //解决缓存穿透问题
 //        this.stringRedisTemplate.opsForValue().set(KEY_PREFIX+pid,JSON.toJSONString(categoryEntities),30+new Random().nextInt(10), TimeUnit.DAYS);
 //
 //        lock.unlock();
-        ResponseVo<List<CategoryEntity>> listResponseVo = this.pmsClient.queryCategoriseWithSubByPid(pid);
+        ResponseVo<List<CategoryEntity>> listResponseVo = this.pmsClient.queryCategoriesWithSubByPid(pid);
         List<CategoryEntity> categoryEntities = listResponseVo.getData();
         return categoryEntities;
     }

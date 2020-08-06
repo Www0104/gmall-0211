@@ -1,23 +1,20 @@
 package com.atguigu.gmall.ums.service.impl;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.omg.CORBA.UserException;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
-import org.springframework.stereotype.Service;
+
+import com.atguigu.gmall.common.bean.PageParamVo;
+import com.atguigu.gmall.common.bean.PageResultVo;
+import com.atguigu.gmall.ums.entity.UserEntity;
+import com.atguigu.gmall.ums.mapper.UserMapper;
+import com.atguigu.gmall.ums.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.atguigu.gmall.common.bean.PageResultVo;
-import com.atguigu.gmall.common.bean.PageParamVo;
-
-import com.atguigu.gmall.ums.mapper.UserMapper;
-import com.atguigu.gmall.ums.entity.UserEntity;
-import com.atguigu.gmall.ums.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.UUID;
-
 
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> implements UserService {
@@ -54,7 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         String salt = UUID.randomUUID().toString().substring(0, 6);
         user.setSalt(salt);
         //加盐加米
-        DigestUtils.md5Hex(user.getPassword()+ salt);
+        user.setPassword(DigestUtils.md5Hex(user.getPassword()+ salt));
         //用户注册
         user.setLevelId(1L);
         user.setCreateTime(new Date());
@@ -70,20 +67,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Override
     public UserEntity queryUser(String loginName, String password) {
-        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("username",loginName)
-        .or().eq("phone",loginName)
-        .or().eq("email",loginName));
-        if (userEntity == null){
-            throw new RuntimeException("账户输入不合法！");
+//        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("username",loginName)
+//        .or().eq("phone",loginName)
+//        .or().eq("email",loginName));
+//        if (userEntity == null){
+////            throw new RuntimeException("账户输入不合法！");
+//            return userEntity;
+//        }
+//
+//        password = DigestUtils.md5Hex(password + userEntity.getSalt());
+//        if (!StringUtils.equals ( password , userEntity.getPassword())){
+//            return null;
+//        }
+//
+//        return userEntity;
+
+        // 1.先根据登录名查询用户信息
+        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("username", loginName)
+                .or().eq("phone", loginName)
+                .or().eq("email", loginName));
+
+        // 2.判空
+        if (userEntity == null) {
+            //throw new IllegalArgumentException("用户名不合法！");
+            return userEntity;
         }
 
+        // 3.获取用户信息中的盐，并对用户输入的明文密码加盐加密
         password = DigestUtils.md5Hex(password + userEntity.getSalt());
-        if (!StringUtils.equals(userEntity.getPassword(), password)){
-            throw new RuntimeException("密码输入错误！");
+
+        // 4. 比较数据库中保存的密码和用户输入的密码（加密）
+        if (!StringUtils.equals(password, userEntity.getPassword())){
+            //throw new IllegalArgumentException("密码不合法！");
+            return null;
         }
 
         return userEntity;
-
     }
 
 }

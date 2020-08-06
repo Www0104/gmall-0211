@@ -13,12 +13,7 @@ public @interface GmallCache {
      */
     String prefix() default "";
 
-    /**
-     * 防止缓存穿透
-     * 通过该属性指定分布式锁的名称
-     * @return
-     */
-    String lock() default "lock";
+
 
     /**
      * 缓存过期时间,单位是分钟
@@ -32,4 +27,11 @@ public @interface GmallCache {
      * @return
      */
     int random() default 5;
+
+    /**
+     * 防止缓存穿透
+     * 通过该属性指定分布式锁的名称
+     * @return
+     */
+    String lock() default "lock";
 }

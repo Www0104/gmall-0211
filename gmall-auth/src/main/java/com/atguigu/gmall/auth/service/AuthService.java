@@ -26,6 +26,8 @@ public class AuthService {
     private JwtProperties jwtProperties;
 
     public void accredit(String loginName, String password, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+
         ResponseVo<UserEntity> userEntityResponseVo = this.umsClient.queryUser(loginName, password);
         UserEntity userEntity = userEntityResponseVo.getData();
         if (userEntity == null) {

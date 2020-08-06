@@ -22,7 +22,7 @@ spring:
     cache: false
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.21.46:3306/guli_cart
+    url: jdbc:mysql://192.168.21.51:3306/guli_cart
     username: root
     password: 123456
   redis:

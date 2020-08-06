@@ -16,5 +16,5 @@ import java.util.List;
 @Mapper
 public interface CategoryMapper extends BaseMapper<CategoryEntity> {
 
-    List<CategoryEntity> queryCategoriseWithSubByPid(Long pid);
+    List<CategoryEntity> queryCategoriesWithSubByPid(Long pid);
 }

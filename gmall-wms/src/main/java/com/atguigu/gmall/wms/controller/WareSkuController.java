@@ -37,10 +37,9 @@ public class WareSkuController {
 
     @GetMapping("sku/{skuId}")
     public ResponseVo<List<WareSkuEntity>> queryWareSkusBySkuId(@PathVariable("skuId")Long skuId){
-        List<WareSkuEntity> skuEntities = this.wareSkuService.list(new QueryWrapper<WareSkuEntity>().eq("sku_id", skuId));
-        return ResponseVo.ok(skuEntities);
+        List<WareSkuEntity> wareSkuEntities = this.wareSkuService.list(new QueryWrapper<WareSkuEntity>().eq("sku_id", skuId));
+        return ResponseVo.ok(wareSkuEntities);
     }
-
     /**
      * 列表
      */

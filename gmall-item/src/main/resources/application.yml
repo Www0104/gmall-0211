@@ -24,6 +24,11 @@ spring:
 feign:
   sentinel:
     enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 100000
+        readTimeout: 600000
 threadPool:
   coreSize: 100
   maxSize: 1000

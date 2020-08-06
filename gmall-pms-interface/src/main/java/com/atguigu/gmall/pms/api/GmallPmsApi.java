@@ -31,10 +31,10 @@ public interface GmallPmsApi {
     public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
 
     @GetMapping("pms/category/parent/{parentId}")
-    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable(" parentId")Long pid);
+    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId")Long pid);
 
     @GetMapping("pms/category/cates/{pid}")
-    public ResponseVo<List<CategoryEntity>> queryCategoriseWithSubByPid(@PathVariable("pid")Long pid);
+    public ResponseVo<List<CategoryEntity>> queryCategoriesWithSubByPid(@PathVariable("pid")Long pid);
 
     @GetMapping("pms/category/all/{cid}")
     public ResponseVo<List<CategoryEntity>> query123CategoriesByCid3(@PathVariable("cid")Long cid);

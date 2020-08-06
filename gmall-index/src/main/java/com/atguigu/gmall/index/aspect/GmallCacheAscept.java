@@ -41,7 +41,7 @@ public class GmallCacheAscept {
         Class returnType = signature.getReturnType();
 
         String json = this.redisTemplate.opsForValue().get(key);
-        if (!StringUtils.isNotBlank(json)){
+        if (StringUtils.isNotBlank(json)){
             return JSON.parseObject(json,returnType);
         }
 
@@ -51,7 +51,7 @@ public class GmallCacheAscept {
 
 
         String json2 = this.redisTemplate.opsForValue().get(key);
-        if (!StringUtils.isNotBlank(json2)){
+        if (StringUtils.isNotBlank(json2)){
             fairLock.unlock();
             return JSON.parseObject(json2,returnType);
         }
