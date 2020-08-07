@@ -1,3 +1,5 @@
+package com.atguigu.gmall.cart.pojo;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +19,7 @@ public class Cart {
     private Long skuId;
     @TableField("`check`") // check是mysql的关键字，所以这里要加'`'号
     private Boolean check; // 选中状态
-    private String image;
+    private String defaultImage;
     private String title;
     @TableField("sale_attrs")
     private String saleAttrs; // 销售属性：List<SkuAttrValueEntity>的json格式
