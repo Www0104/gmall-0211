@@ -23,9 +23,22 @@ spring:
     password: 123456
   redis:
     host: 192.168.248.134
+  rabbitmq:
+    host: 192.168.248.134
+    virtual-host: /www
+    username: www
+    password: 123456
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 8
+        prefetch: 1
+    publisher-confirm-type: simple
+    publisher-returns: true
 feign:
   sentinel:
     enabled: true
+
 
 mybatis-plus:
   mapper-locations: classpath:mapper/wms/**/*.xml

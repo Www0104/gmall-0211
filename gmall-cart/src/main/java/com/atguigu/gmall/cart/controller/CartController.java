@@ -2,7 +2,7 @@ package com.atguigu.gmall.cart.controller;
 
 import com.atguigu.gmall.cart.Interceptor.LoginInterceptor;
 import com.atguigu.gmall.cart.pojo.Cart;
-import com.atguigu.gmall.cart.pojo.UserInfo;
+import com.atguigu.gmall.common.bean.UserInfo;
 import com.atguigu.gmall.cart.service.CartService;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,14 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+
+    @GetMapping("user/{userId}")
+    @ResponseBody
+    public ResponseVo<List<Cart>> queryCheckedCartByUserId(@PathVariable("userId")Long userId){
+        List<Cart> carts = this.cartService.queryCheckedCartByUserId(userId);
+        return ResponseVo.ok(carts);
+    }
+
 
     @GetMapping("cart.html")
     public String queryCarts(Model model){

@@ -5,22 +5,18 @@ import com.atguigu.gmall.cart.Interceptor.LoginInterceptor;
 import com.atguigu.gmall.cart.feign.GmallPmsClient;
 import com.atguigu.gmall.cart.feign.GmallSmsClient;
 import com.atguigu.gmall.cart.feign.GmallWmsClient;
-import com.atguigu.gmall.cart.mapper.CartMapper;
 import com.atguigu.gmall.cart.pojo.Cart;
-import com.atguigu.gmall.cart.pojo.UserInfo;
+import com.atguigu.gmall.common.bean.UserInfo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
 import com.atguigu.gmall.sms.vo.ItemSaleVo;
 import com.atguigu.gmall.wms.entity.WareSkuEntity;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import org.apache.commons.configuration.resolver.CatalogResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import springfox.documentation.spring.web.json.Json;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,6 +38,8 @@ public class CartService {
     private CartAsyncService cartAsyncService;
 
     private static final String KEY_PREFIX = "cart:info:";
+
+    private static final String PRICE_PREFIX = "cart:price:";
 
     public void saveCart(Cart cart) {
         //用户登陆信息
@@ -98,7 +96,9 @@ public class CartService {
             cart.setSales(JSON.toJSONString(itemSaleVos));
 
             //新增mysql数据库
-            this.cartAsyncService.addCart(cart);
+            this.cartAsyncService.addCart(userId,cart);
+            //新增价格缓存
+            this.redisTemplate.opsForValue().set(PRICE_PREFIX + skuId, skuEntity.getPrice().toString());
 
         }
 
@@ -138,7 +138,11 @@ public class CartService {
         List<Object> unLoginCartJsons = unLoginHashOps.values();
         List<Cart> unLoginCarts = null;
         if (!CollectionUtils.isEmpty(unLoginCartJsons)){
-            unLoginCarts = unLoginCartJsons.stream().map(cartJson -> JSON.parseObject(cartJson.toString(), Cart.class)).collect(Collectors.toList());
+            unLoginCarts = unLoginCartJsons.stream().map(cartJson -> {
+                Cart cart = JSON.parseObject(cartJson.toString(), Cart.class);
+                cart.setCurrentPrice(new BigDecimal(this.redisTemplate.opsForValue().get(PRICE_PREFIX+cart.getSkuId())));
+                return cart;
+            }).collect(Collectors.toList());
         }
         //判断登陆状态
         Long userId = userInfo.getUserId();
@@ -162,7 +166,7 @@ public class CartService {
                     this.cartAsyncService.updateCartByUserIdAndSkuId(userId.toString(),cart);
                 } else {
                     cart.setUserId(userId.toString());
-                    this.cartAsyncService.addCart(cart);
+                    this.cartAsyncService.addCart(userId.toString() , cart);
                 }
                 loginHashOps.put(cart.getSkuId().toString(),JSON.toJSONString(cart));
 //                loginHashOps.delete();
@@ -174,7 +178,11 @@ public class CartService {
         //查询登陆状态购物车
         List<Object> loginCartJsons = loginHashOps.values();
         if (!CollectionUtils.isEmpty(loginCartJsons)){
-            return loginCartJsons.stream().map(cartJson -> JSON.parseObject(cartJson.toString(),Cart.class)).collect(Collectors.toList());
+            return loginCartJsons.stream().map(cartJson -> {
+                Cart cart = JSON.parseObject(cartJson.toString(),Cart.class);
+                cart.setCurrentPrice(new BigDecimal(this.redisTemplate.opsForValue().get(PRICE_PREFIX + cart.getSkuId())));
+                return cart;
+            }).collect(Collectors.toList());
         }
 
         return null;
@@ -216,5 +224,15 @@ public class CartService {
             this.cartAsyncService.deleteCartsByUserIdAndSkuId(userId,skuId);
             hashOps.delete(skuId.toString());
         }
+    }
+
+    public List<Cart> queryCheckedCartByUserId(Long userId) {
+        BoundHashOperations<String, Object, Object> hashOps = this.redisTemplate.boundHashOps(KEY_PREFIX + userId);
+        List<Object> cartJsons = hashOps.values();
+        if (!CollectionUtils.isEmpty(cartJsons)){
+            return cartJsons.stream().map(cartJson -> JSON.parseObject(cartJson.toString(), Cart.class)).filter(cart -> cart.getCheck()).collect(Collectors.toList());
+
+        }
+        return null;
     }
 }

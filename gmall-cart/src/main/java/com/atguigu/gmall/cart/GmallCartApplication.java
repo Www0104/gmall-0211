@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @MapperScan("com.atguigu.gmall.cart.mapper")
 @SpringBootApplication
 @EnableAsync
-public class GmallCartApplication {
+public class  GmallCartApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(GmallCartApplication.class, args);
